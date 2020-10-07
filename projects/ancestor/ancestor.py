@@ -1,68 +1,43 @@
-from collections import deque
 
 
+from graph import Graph, Queue, Stack
+from collections import defaultdict, deque
 
-from collections import defaultdict
+def earliest_ancestor(ancestors, starting_node):
+    parent_child = {}
 
+    for parent, child in ancestors:
+        if child not in parent_child:
+            parent_child[child] = set()
 
-class Stack():
-    def __init__(self):
-        self.stack = []
+    parent_child[child].add(parent)
 
-    def push(self, value):
-        self.stack.append(value)
+    earliest = -1 # because it testing for this
 
-    def pop(self):
-        if self.size() > 0:
-            return self.stack.pop()
-        else:
-            return None
-
-    def size(self):
-        return len(self.stack)
-
-
-def dfs(starting_vertex, family):
-    # Depth first search uses stacks so...
-    # Create a stack
     stack = Stack()
-    stack.push([starting_vertex])
+# Adding first starting node to the stack
+    stack.push(starting_node)
 
-    # Create an array for visited vertices
-    visited = []
+    while stack: # is not empty
 
-    while stack.size() > 0:
-        path = stack.pop()
+        current = stack.pop()
+        if current in parent_child:
+            for parents in parent_child[current]:
+                parents = parent
 
-        # Get the last vertex in the path
-        vertex = path[-1]
+                if parent < parents:
+                    parents = parent
+                
+                stack.push(parent)
+            earliest = parents
 
-        # Check if the vertex has been visited or not
-        if vertex not in visited:
-            visited.append(vertex)
-
-        for descendant in family[vertex]:
-            new_path = path.copy()
-            new_path.append(descendant)
-            stack.push(new_path)
-
-    return visited[-1]
-
-def earliest_ancestor(family_tree, person):
-    # default items are created using list(), which returns a new empty list object.
-    family = defaultdict(list)
-
-    # Creates a dictionary where each child (key) has parents (values)
-    for parent, child in family_tree:
-        family[child].append(parent)
-
-    # If the child has no parents
-    if person not in family:
-        return -1
-
-    # Perform DFS using the specified ID and the family list
-    earliest = dfs(person, family)
 
     return earliest
-
+                    
     
+
+
+## CHECK:
+test_ancestors = [(1, 3), (2, 3), (3, 6), (5, 6), (5, 7), (4, 5), (4, 8), 
+                  (8, 9), (11, 8), (10, 1)]
+earliest_ancestor(test_ancestors, 1)

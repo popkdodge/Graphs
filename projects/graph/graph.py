@@ -63,7 +63,7 @@ class Graph:
                 for neighbor in self.get_neighbors(v): #Poor man's recursion.
                     q.push(neighbor) #Add each neighbor to the stack.
 
-    def dft_recursive(self, starting_vertex, visited=set()): #Add some items that need to be passed in.
+    def dft_recursive(self, starting_vertex, stack=S=, visited=set()): #Add some items that need to be passed in.
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
@@ -75,7 +75,7 @@ class Graph:
             print(starting_vertex) #Print to pass test.
             visited.add(starting_vertex) #Adds item to set.
             for neighbor in self.get_neighbors(starting_vertex): #Find all of the neighbors for this point.
-                self.dft_recursive(neighbor, visited) #Run recursion on all of the neighbors.
+                self.dft_recursive(neighbor, stack, visited) #Run recursion on all of the neighbors.
         
 
     def bfs(self, starting_vertex, destination_vertex):
@@ -129,7 +129,6 @@ class Graph:
         This should be done using recursion.
         First time this runs, it will automatically create an empty set for visited items, and a blank list for the path.
         """
-        
         visited.add(starting_vertex) #Add starting point to visited set.
         path = path + [starting_vertex] #Add starting point to path list.
         if starting_vertex == destination_vertex: #Check if starting point is the destination.
